@@ -2,12 +2,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:zavisoft_task/features/widgets/expanded_header.dart';
+import 'package:zavisoft_task/features/widgets/tab_page.dart';
 import '../controllers/product_controller.dart';
 import '../controllers/tab_controller.dart';
 import '../controllers/scroll_controller.dart';
 import '../widgets/collapsed_header.dart';
 import '../widgets/custom_tab_bar.dart';
-import '../widgets/product_card.dart';
 
 class ProductListingScreen extends StatelessWidget {
   ProductListingScreen({super.key});
@@ -19,12 +19,11 @@ class ProductListingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: RefreshIndicator(
-        onRefresh: () => productController.refreshData(),
-        child: CustomScrollView(
+      body: SafeArea(
+        top: false,
+        child: NestedScrollView(
           controller: scrollControllerX.scrollController,
-          slivers: [
-            // Collapsible header
+          headerSliverBuilder: (context, innerBoxIsScrolled) => [
             GetX<ScrollControllerX>(
               builder: (ctrl) {
                 return SliverAppBar(
@@ -32,117 +31,124 @@ class ProductListingScreen extends StatelessWidget {
                   collapsedHeight: 80,
                   pinned: true,
                   stretch: true,
+                  forceElevated: innerBoxIsScrolled,
                   backgroundColor: Colors.blue,
                   flexibleSpace: FlexibleSpaceBar(
                     collapseMode: CollapseMode.pin,
                     title: ctrl.isHeaderCollapsed.value
                         ? CollapsedHeader(
                             onSearch: (query) {
-                              // Handle search
-                              if (kDebugMode) {
-                                print('Searching for: $query');
-                              }
+                              if (kDebugMode) print('Searching for: $query');
                             },
                           )
                         : null,
-                    background:
-                        const ExpandedHeader(),
+                    background: const ExpandedHeader(),
                   ),
                 );
               },
             ),
 
-            // Tab Bar - Now using Stateless widget
-            SliverToBoxAdapter(
-              child: GetBuilder<CustomTabController>(
-                builder: (controller) {
-                  return Container(
-                    height: 50,
-                    color: Colors.white,
-                    child: Builder(
-                      builder: (context) {
-                        // Create TabController with proper vsync
-                        final tabControllerWidget = TabController(
-                          length: productController.categories.length,
-                          vsync: Scaffold.of(context),
-                          initialIndex: controller.currentIndex.value,
-                        );
+            SliverPersistentHeader(
+              pinned: true,
+              delegate: _TabBarDelegate(
+                height: 50,
+                child: GetBuilder<CustomTabController>(
+                  builder: (controller) {
+                    return Container(
+                      height: 50,
+                      color: Colors.white,
+                      child: Builder(
+                        builder: (ctx) {
+                          final tabControllerWidget = TabController(
+                            length: productController.categories.length,
+                            vsync: Scaffold.of(ctx),
+                            initialIndex: controller.currentIndex.value,
+                          );
 
-                        // Sync with our controller
-                        WidgetsBinding.instance.addPostFrameCallback((_) {
-                          controller.syncWithTabController(tabControllerWidget);
-                        });
+                          WidgetsBinding.instance.addPostFrameCallback((_) {
+                            controller.syncWithTabController(
+                              tabControllerWidget,
+                            );
+                          });
 
-                        return CustomTabBar(
-                          tabController: tabControllerWidget,
-                          onTabChanged: _onTabChanged,
-                        );
-                      },
-                    ),
-                  );
-                },
+                          return CustomTabBar(
+                            tabController: tabControllerWidget,
+                            onTabChanged: _onTabTapped,
+                          );
+                        },
+                      ),
+                    );
+                  },
+                ),
               ),
             ),
-
-            // Tab content as Sliver
-            GetX<ProductController>(
-              builder: (ctrl) {
-                if (ctrl.isLoading.value && ctrl.products.isEmpty) {
-                  return const SliverFillRemaining(
-                    child: Center(child: CircularProgressIndicator()),
-                  );
-                }
-
-                if (ctrl.errorMessage.isNotEmpty && ctrl.products.isEmpty) {
-                  return SliverFillRemaining(
-                    child: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                            child: Text(ctrl.errorMessage.value),
-                          ),
-                          const SizedBox(height: 16),
-                          ElevatedButton(
-                            onPressed: () => ctrl.refreshData(),
-                            child: const Text('Retry'),
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                }
-
-                return Obx(() {
-                  final currentIndex = tabController.currentIndex.value;
-                  final products = ctrl.getProductsForTab(currentIndex);
-
-                  return SliverPadding(
-                    padding: const EdgeInsets.all(8.0),
-                    sliver: SliverList(
-                      delegate: SliverChildBuilderDelegate((context, index) {
-                        if (index < products.length) {
-                          return ProductCard(product: products[index]);
-                        }
-                        return null;
-                      }, childCount: products.length),
-                    ),
-                  );
-                });
-              },
-            ),
           ],
+
+          body: GetX<ProductController>(
+            builder: (ctrl) {
+              if (ctrl.isLoading.value && ctrl.products.isEmpty) {
+                return const Center(child: CircularProgressIndicator());
+              }
+
+              if (ctrl.errorMessage.isNotEmpty && ctrl.products.isEmpty) {
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Text(ctrl.errorMessage.value),
+                      ),
+                      const SizedBox(height: 16),
+                      ElevatedButton(
+                        onPressed: () => ctrl.refreshData(),
+                        child: const Text('Retry'),
+                      ),
+                    ],
+                  ),
+                );
+              }
+
+              return PageView.builder(
+                controller: tabController.pageController,
+                onPageChanged: tabController.onPageSwiped,
+                itemCount: productController.categories.length,
+                itemBuilder: (context, pageIndex) => TabPage(
+                  tabIndex: pageIndex,
+                  productController: productController,
+                ),
+              );
+            },
+          ),
         ),
       ),
     );
   }
 
-  void _onTabChanged(int index) {
-    scrollControllerX.saveTabPosition(tabController.currentIndex.value);
-
+  void _onTabTapped(int index) {
     tabController.changeTab(index);
-
-    scrollControllerX.restoreTabPosition(index);
   }
+}
+
+class _TabBarDelegate extends SliverPersistentHeaderDelegate {
+  const _TabBarDelegate({required this.height, required this.child});
+
+  final double height;
+  final Widget child;
+
+  @override
+  double get minExtent => height;
+  @override
+  double get maxExtent => height;
+
+  @override
+  Widget build(
+    BuildContext context,
+    double shrinkOffset,
+    bool overlapsContent,
+  ) => child;
+
+  @override
+  bool shouldRebuild(_TabBarDelegate old) =>
+      old.height != height || old.child != child;
 }

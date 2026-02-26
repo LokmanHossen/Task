@@ -11,11 +11,7 @@ class ExpandedHeader extends StatelessWidget {
       color: Colors.blue,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
-        children: const [
-          BannerSection(),
-          SearchBar(),
-          UserProfileSection(),
-        ],
+        children: const [BannerSection(), SearchBar(), UserProfileSection()],
       ),
     );
   }
@@ -54,11 +50,7 @@ class BannerItem extends StatelessWidget {
   final IconData icon;
   final String label;
 
-  const BannerItem({
-    super.key,
-    required this.icon,
-    required this.label,
-  });
+  const BannerItem({super.key, required this.icon, required this.label});
 
   @override
   Widget build(BuildContext context) {
@@ -85,7 +77,7 @@ class SearchBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 45,
+      height: 50,
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -109,12 +101,12 @@ class UserProfileSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Get.find<ProductController>();
-    
+
     return GetX<ProductController>(
       builder: (controller) {
         final user = controller.user.value;
         return Container(
-          height: 60,
+          height: 72,
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Row(
             children: [
