@@ -1,4 +1,5 @@
 class User {
+  final int? id;
   final String email;
   final String username;
   final String password;
@@ -7,6 +8,7 @@ class User {
   final String phone;
 
   User({
+    this.id,
     required this.email,
     required this.username,
     required this.password,
@@ -17,6 +19,7 @@ class User {
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
+      id: json['id'],
       email: json['email'],
       username: json['username'],
       password: json['password'],
@@ -34,10 +37,7 @@ class Name {
   Name({required this.firstname, required this.lastname});
 
   factory Name.fromJson(Map<String, dynamic> json) {
-    return Name(
-      firstname: json['firstname'],
-      lastname: json['lastname'],
-    );
+    return Name(firstname: json['firstname'], lastname: json['lastname']);
   }
 
   String get fullname => '$firstname $lastname';
@@ -76,9 +76,6 @@ class Geolocation {
   Geolocation({required this.lat, required this.long});
 
   factory Geolocation.fromJson(Map<String, dynamic> json) {
-    return Geolocation(
-      lat: json['lat'],
-      long: json['long'],
-    );
+    return Geolocation(lat: json['lat'], long: json['long']);
   }
 }

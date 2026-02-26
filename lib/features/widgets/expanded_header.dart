@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../controllers/product_controller.dart';
+import '../controllers/auth_controller.dart';
 
 class ExpandedHeader extends StatelessWidget {
   const ExpandedHeader({super.key});
@@ -100,11 +100,9 @@ class UserProfileSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Get.find<ProductController>();
-
-    return GetX<ProductController>(
+    return GetX<AuthController>(
       builder: (controller) {
-        final user = controller.user.value;
+        final user = controller.currentUser.value;
         return Container(
           height: 72,
           padding: const EdgeInsets.symmetric(horizontal: 16),
