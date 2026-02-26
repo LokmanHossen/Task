@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import '../models/user_model.dart';
 import '../services/api_service.dart';
 import '../services/auth_service.dart';
+import './scroll_controller.dart';
 
 class AuthController extends GetxController {
   /// Observable properties
@@ -84,6 +85,12 @@ class AuthController extends GetxController {
   Future<void> logout() async {
     try {
       isLoading.value = true;
+      
+      // Reset scroll controller state
+      if (Get.isRegistered<ScrollControllerX>()) {
+        Get.find<ScrollControllerX>().resetScroll();
+      }
+      
       await AuthService.logout();
       currentUser.value = null;
       isLoggedIn.value = false;
