@@ -1,4 +1,4 @@
-# Daraz Clone - Flutter Product Listing
+# Daraz  - Flutter Product Listing
 
 A Flutter implementation of a Daraz-style product listing with proper scroll architecture and gesture handling.
 
