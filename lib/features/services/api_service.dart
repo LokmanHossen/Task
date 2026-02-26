@@ -22,7 +22,9 @@ class ApiService extends GetxService {
 
   Future<List<Product>> fetchProductsByCategory(String category) async {
     try {
-      final response = await http.get(Uri.parse('$baseUrl/products/category/$category'));
+      final response = await http.get(
+        Uri.parse('$baseUrl/products/category/$category'),
+      );
       if (response.statusCode == 200) {
         List<dynamic> data = json.decode(response.body);
         return data.map((json) => Product.fromJson(json)).toList();
@@ -43,6 +45,18 @@ class ApiService extends GetxService {
       throw Exception('Failed to load user profile');
     } catch (e) {
       throw Exception('Failed to load user profile: $e');
+    }
+  }
+
+  Future<User> fetchUser(int userId) async {
+    try {
+      final response = await http.get(Uri.parse('$baseUrl/users/$userId'));
+      if (response.statusCode == 200) {
+        return User.fromJson(json.decode(response.body));
+      }
+      throw Exception('Failed to load user with ID: $userId');
+    } catch (e) {
+      throw Exception('Failed to load user: $e');
     }
   }
 }
