@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import '../controllers/auth_controller.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+  const LoginScreen({super.key});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -68,7 +68,6 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // Logo/Title
                   Container(
                     width: 100,
                     height: 100,
@@ -84,7 +83,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   const SizedBox(height: 32),
 
-                  // Title
                   const Text(
                     'Daraz Store',
                     style: TextStyle(
@@ -95,14 +93,13 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   const SizedBox(height: 12),
 
-                  // Subtitle
                   const Text(
                     'Demo Login with FakeStore API',
                     style: TextStyle(fontSize: 14, color: Colors.white70),
                   ),
                   const SizedBox(height: 48),
 
-                  // User ID Input
+                  
                   TextField(
                     controller: _userIdController,
                     keyboardType: TextInputType.number,
@@ -111,7 +108,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       hintStyle: const TextStyle(color: Colors.white54),
                       prefixIcon: const Icon(Icons.person, color: Colors.white),
                       filled: true,
-                      fillColor: Colors.white.withOpacity(0.1),
+                      fillColor: Colors.white.withValues(alpha: 0.1),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                         borderSide: const BorderSide(color: Colors.white30),
@@ -131,7 +128,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   const SizedBox(height: 24),
 
-                  // Login Button
                   Obx(
                     () => SizedBox(
                       width: double.infinity,
@@ -170,11 +166,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   const SizedBox(height: 32),
 
-                  // Demo Info
                   Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.1),
+                      color: Colors.white.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(12),
                       border: Border.all(color: Colors.white30),
                     ),

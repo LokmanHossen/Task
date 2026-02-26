@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
   }
 
   Widget _buildHome() {
-    // Start with login screen; AuthController will handle navigation
+  
     return const LoginScreen();
   }
 }

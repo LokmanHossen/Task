@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import '../models/user_model.dart';
 import '../services/api_service.dart';
@@ -5,7 +6,6 @@ import '../services/auth_service.dart';
 import './scroll_controller.dart';
 
 class AuthController extends GetxController {
-  /// Observable properties
   final Rx<User?> currentUser = Rx<User?>(null);
   final RxBool isLoading = RxBool(false);
   final RxBool isLoggedIn = RxBool(false);
@@ -17,7 +17,6 @@ class AuthController extends GetxController {
     checkAuthStatus();
   }
 
-  /// Check if user was previously logged in
   Future<void> checkAuthStatus() async {
     try {
       final loggedIn = await AuthService.isLoggedIn();
@@ -27,27 +26,27 @@ class AuthController extends GetxController {
         await loadUserProfile(userId);
       }
     } catch (e) {
-      print('Error checking auth status: $e');
+      if (kDebugMode) {
+        print('Error checking auth status: $e');
+      }
     }
   }
 
-  /// Login with user ID (for demo purposes using FakeStore API)
   Future<bool> login(int userId) async {
     try {
       isLoading.value = true;
       errorMessage.value = '';
 
-      // Validate user ID
       if (userId < 1 || userId > 10) {
         errorMessage.value = 'User ID must be between 1 and 10';
         isLoading.value = false;
         return false;
       }
 
-      // Fetch user from API
+  
       final user = await ApiService().fetchUser(userId);
 
-      // Save login state
+
       final saved = await AuthService.saveLoginState(userId);
 
       if (saved) {
@@ -60,13 +59,14 @@ class AuthController extends GetxController {
       }
     } catch (e) {
       errorMessage.value = 'Login failed: ${e.toString()}';
-      print('Login error: $e');
+      if (kDebugMode) {
+        print('Login error: $e');
+      }
       isLoading.value = false;
       return false;
     }
   }
 
-  /// Load user profile
   Future<void> loadUserProfile(int userId) async {
     try {
       isLoading.value = true;
@@ -81,12 +81,9 @@ class AuthController extends GetxController {
     }
   }
 
-  /// Logout user
   Future<void> logout() async {
     try {
       isLoading.value = true;
-      
-      // Reset scroll controller state
       if (Get.isRegistered<ScrollControllerX>()) {
         Get.find<ScrollControllerX>().resetScroll();
       }
@@ -101,7 +98,6 @@ class AuthController extends GetxController {
     }
   }
 
-  /// Update user (refresh profile)
   Future<void> refreshUserProfile() async {
     final userId = currentUser.value?.id;
     if (userId != null) {
