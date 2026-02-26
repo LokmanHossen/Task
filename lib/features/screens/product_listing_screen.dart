@@ -35,6 +35,7 @@ class ProductListingScreen extends StatelessWidget {
                   backgroundColor: Colors.blue,
                   flexibleSpace: FlexibleSpaceBar(
                     collapseMode: CollapseMode.pin,
+                    titlePadding: EdgeInsets.zero, 
                     title: ctrl.isHeaderCollapsed.value
                         ? CollapsedHeader(
                             onSearch: (query) {

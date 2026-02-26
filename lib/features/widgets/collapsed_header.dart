@@ -16,23 +16,26 @@ class CollapsedHeader extends StatelessWidget {
             ? user!.name.firstname[0].toUpperCase()
             : 'D';
 
-        return Row(
-          children: [
-            // Left side: User profile
-            CircleAvatar(
-              radius: 18,
-              backgroundColor: Colors.white,
-              child: Text(
-                avatarText,
-                style: const TextStyle(
-                  color: Colors.blue,
-                  fontWeight: FontWeight.bold,
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              
+              // Left side: User profile
+              CircleAvatar(
+                radius: 20,
+                backgroundColor: Colors.white,
+                child: Text(
+                  avatarText,
+                  style: const TextStyle(
+                    color: Colors.blue,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(width: 8),
-            Expanded(
-              child: Column(
+              const SizedBox(width: 12),
+              Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -56,30 +59,17 @@ class CollapsedHeader extends StatelessWidget {
                   ],
                 ],
               ),
-            ),
-            // Right side: Logout button
-            MaterialButton(
-              onPressed: () {
-                _handleLogout(auth);
-              },
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(4),
+              const Spacer(),
+              // Right side: Logout icon button
+              IconButton(
+                icon: const Icon(Icons.logout, color: Colors.white),
+                onPressed: () {
+                  _handleLogout(auth);
+                },
+                tooltip: 'Logout',
               ),
-              color: Colors.red.shade400,
-              splashColor: Colors.red.shade600,
-              child: const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-                child: Text(
-                  'Logout',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
-          ],
+            ],
+          ),
         );
       },
     );
