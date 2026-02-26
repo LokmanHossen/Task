@@ -1,4 +1,5 @@
 # Daraz  - Flutter Product Listing
+https://github.com/user-attachments/assets/d328e278-6b29-461b-8c1b-17cb20fa51ef
 
 A Flutter implementation of a Daraz-style product listing with proper scroll architecture and gesture handling.
 
@@ -65,3 +66,6 @@ GetX is used for:
 - Reactive state management
 - Dependency injection
 - Controller lifecycle management
+
+
+
