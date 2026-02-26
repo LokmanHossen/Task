@@ -103,15 +103,24 @@ class UserProfileSection extends StatelessWidget {
     return GetX<AuthController>(
       builder: (controller) {
         final user = controller.currentUser.value;
+        final avatarText = user?.name.firstname.isNotEmpty == true
+            ? user!.name.firstname[0].toUpperCase()
+            : 'D';
         return Container(
           height: 72,
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Row(
             children: [
-              const CircleAvatar(
-                radius: 18,
+               CircleAvatar(
+                radius: 20,
                 backgroundColor: Colors.white,
-                child: Icon(Icons.person_outline_outlined, color: Colors.blue),
+                child: Text(
+                  avatarText,
+                  style: const TextStyle(
+                    color: Colors.blue,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
               const SizedBox(width: 8),
               Expanded(

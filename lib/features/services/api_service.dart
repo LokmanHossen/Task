@@ -37,8 +37,8 @@ class ApiService extends GetxService {
 
   Future<User> fetchUserProfile() async {
     try {
-      // Using user 1 as demo
-      final response = await http.get(Uri.parse('$baseUrl/users/1'));
+
+      final response = await http.get(Uri.parse('$baseUrl/users/'));
       if (response.statusCode == 200) {
         return User.fromJson(json.decode(response.body));
       }

@@ -21,8 +21,6 @@ class CollapsedHeader extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              
-              // Left side: User profile
               CircleAvatar(
                 radius: 20,
                 backgroundColor: Colors.white,
@@ -60,7 +58,7 @@ class CollapsedHeader extends StatelessWidget {
                 ],
               ),
               const Spacer(),
-              // Right side: Logout icon button
+          
               IconButton(
                 icon: const Icon(Icons.logout, color: Colors.white),
                 onPressed: () {
@@ -76,7 +74,7 @@ class CollapsedHeader extends StatelessWidget {
   }
 
   void _handleLogout(AuthController auth) {
-    // Show confirmation dialog
+
     Get.dialog(
       AlertDialog(
         title: const Text('Confirm Logout'),

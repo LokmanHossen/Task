@@ -49,7 +49,6 @@ class ScrollControllerX extends GetxController {
     }
   }
 
-  /// Reset scroll controller state
   void resetScroll() {
     tabScrollPositions.clear();
     isHeaderCollapsed.value = false;
