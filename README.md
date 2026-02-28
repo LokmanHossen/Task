@@ -38,7 +38,6 @@ The vertical scroll is owned by a single `ScrollControllerX` class that:
 **Trade-offs:**
 - **Single Scroll Position**: All tabs share the same scrollable space, which means scrolling far down in one tab and switching to another with fewer items might show empty space
 - **Memory Usage**: Storing scroll positions for each tab in memory
-- **Tab Switching Animation**: No smooth scroll animation when switching tabs (uses jumpTo instead of animateTo)
 
 **Limitations:**
 - Cannot have independent scroll physics per tab
